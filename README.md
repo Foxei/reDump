@@ -5,7 +5,7 @@ Welcome to **reDump** this is a small executable written for the [reMarkable 2](
 # Usage with reStream
 
 Clone the [feature branche](https://github.com/rien/reStream/tree/feature/support-reMarkable-2) of the [reStream](https://github.com/rien/reStream) project and this repository.
-```
+```bash
 git clone git@github.com:rien/reStream.git
 git clone git@github.com:Foxei/reDump.git
 cd reStream
@@ -15,7 +15,7 @@ checkout feature/support-reMarkable-2
 Go throug the usuall setup process of the [reStream](https://github.com/rien/reStream) project.
 
 Copy the precompile `reDump` executbale on you reMarkable and make it executable.
-```
+```bash
 cd reDump
 cd bin
 scp ./reDump.remarkable.shared root@10.11.99.1:/home/root/reDump
@@ -24,7 +24,7 @@ ssh root@10.11.99.1 'chmod +x /home/root/reDump'
 
 Open the `reStream.sh` from the [reStream](https://github.com/rien/reStream) prject and replace the folling lines:
 
-```
+```bash
 skip_bytes="$((0x$skip_bytes_hex + 8))"
 echo "framebuffer is at 0x$skip_bytes_hex"
 
@@ -39,7 +39,7 @@ window_length_blocks="$((window_bytes / page_size + 1))"
 head_fb0="dd if=/proc/$pid/mem bs=$page_size skip=$window_start_blocks count=$window_length_blocks 2>/dev/null | tail -c+$window_offset | head -c $window_bytes"
 ```
 By the patch to use `reDump`:
-```
+```bash
 # Save framebuffer location
 framebuffer_addresse="$((0x$skip_bytes_hex))"
 echo "framebuffer is at 0x$framebuffer_addresse"

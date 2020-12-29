@@ -51,4 +51,12 @@ window_offset=8
 head_fb0="/home/root/reDump -p $pid -b $framebuffer_addresse -s $window_offset -c $window_bytes"
 ```
 
+**Optional** Fix rotation.
+
+Add a `transpose=2` to the video filters.
+
+```bash
+video_filters="$video_filters,transpose=2"
+```
+
 Done use reStream as normal.

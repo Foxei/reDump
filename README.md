@@ -61,7 +61,7 @@ video_filters="$video_filters,transpose=2"
 
 Done use reStream as normal.
 
-# What do i know about the rM2 framebuffer
+# What do I know about the rM2 framebuffer
 
 Most of the information I will present here is a collection of information by different users and projects. Namingly the [rmView](https://github.com/bordaigorl/rmview) and [reStream](https://github.com/rien/reStream) project. The goal to a succsessfull stream is to locate framebuffer (just the image that is displayed on the reMarkables screen) within the memory of the `xochitl` (main reMarkable software) application. In the following I will explain how reDump accomplishs that. 
 

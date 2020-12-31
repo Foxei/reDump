@@ -1,6 +1,7 @@
 # reDump
 
-Welcome to **reDump** this is a small executable written for the [reMarkable 2](https://remarkable.com/). This executable can be used to dump the framebuffer and parse it using script like [reStream](https://github.com/rien/reStream) or [rmView](https://github.com/bordaigorl/rmview). In comparrison to the system solutions like `dd` with around (2-3 fps) this exectuable can dump with around (12-15 fps). Both numbers including the compression time with `lz4` that is not performed by reDump.
+Welcome to **reDump** 
+This is a small executable written for the [reMarkable 2](https://remarkable.com/). This executable can be used to dump the framebuffer and parse it using scripts like [reStream](https://github.com/rien/reStream) or [rmView](https://github.com/bordaigorl/rmview). In comparison to  system solutions like `dd` with around (2-3 fps) this exectuable can dump with around (12-15 fps). Both numbers include the compression time with `lz4` which is not performed by reDump.
 
 # Usage with reStream
 
@@ -12,7 +13,7 @@ cd reStream
 checkout feature/support-reMarkable-2
 ```
 
-Go throug the usuall setup process of the [reStream](https://github.com/rien/reStream) project.
+Go throug the usual setup process of the [reStream](https://github.com/rien/reStream) project.
 
 Copy the precompile `reDump` executbale on you reMarkable and make it executable.
 ```bash
@@ -22,7 +23,7 @@ scp ./reDump.remarkable.shared root@10.11.99.1:/home/root/reDump
 ssh root@10.11.99.1 'chmod +x /home/root/reDump'
 ```
 
-Open the `reStream.sh` from the [reStream](https://github.com/rien/reStream) prject and replace the folling lines:
+Open the `reStream.sh` from the [reStream](https://github.com/rien/reStream) project and replace the following lines:
 
 ```bash
 skip_bytes="$((0x$skip_bytes_hex + 8))"
@@ -59,15 +60,20 @@ Add a `transpose=2` to the video filters.
 video_filters="$video_filters,transpose=2"
 ```
 
-Done use reStream as normal.
+Done! Now you can use reStream!
 
 # What do I know about the rM2 framebuffer
 
-Most of the information I will present here is a collection of information by different users and projects. Namingly the [rmView](https://github.com/bordaigorl/rmview) and [reStream](https://github.com/rien/reStream) project. The goal to a succsessfull stream is to locate framebuffer (just the image that is displayed on the reMarkables screen) within the memory of the `xochitl` (main reMarkable software) application. In the following I will explain how reDump accomplishs that. 
+Most of the information I will present here is a collection of information by different users and projects. Namingly the [rmView](https://github.com/bordaigorl/rmview) and [reStream](https://github.com/rien/reStream) project.
+The goal to a successfull stream is locating the framebuffer (the image that is displayed on the reMarkables screen) within the memory of the `xochitl` (main reMarkable software) application.
+In the following I explain how reDump accomplishs that. 
 
 ## How is the framebuffer located inside the memory?
 
-The frame buffer is located in its own memory region and is stored consecutively. The memory regions allocated by a program are mapped inside the `/proc/pid/maps` file. Some smart person found out that the exact address can be extracted with the following shell command. Note: `pid` stands for the process id of `xochitl`.
+The frame buffer is located in its own memory region and is stored consecutively.
+The memory regions allocated by a program are mapped inside the `/proc/pid/maps` file.
+Some smart person found out that the exact address can be extracted with the following shell command.
+Note: `pid` stands for the process id of `xochitl`.
 
 ```bash
 # it is actually the map allocated _after_ the fb0 mmap

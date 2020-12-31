@@ -5,62 +5,10 @@ This is a small executable written for the [reMarkable 2](https://remarkable.com
 
 # Usage with reStream
 
-Clone the [feature branche](https://github.com/rien/reStream/tree/feature/support-reMarkable-2) of the [reStream](https://github.com/rien/reStream) project and this repository.
+See my fork of the [reStream](https://github.com/Foxei/reStream) project.
 ```bash
-git clone git@github.com:rien/reStream.git
-git clone git@github.com:Foxei/reDump.git
-cd reStream
-checkout feature/support-reMarkable-2
+git clone git@github.com:Foxei/reStream.git
 ```
-
-Go throug the usual setup process of the [reStream](https://github.com/rien/reStream) project.
-
-Copy the precompile `reDump` executbale on you reMarkable and make it executable.
-```bash
-cd reDump
-cd bin
-scp ./reDump.remarkable.shared root@10.11.99.1:/home/root/reDump
-ssh root@10.11.99.1 'chmod +x /home/root/reDump'
-```
-
-Open the `reStream.sh` from the [reStream](https://github.com/rien/reStream) project and replace the following lines:
-
-```bash
-skip_bytes="$((0x$skip_bytes_hex + 8))"
-echo "framebuffer is at 0x$skip_bytes_hex"
-
-# carve the framebuffer out of the process memory
-page_size=4096
-window_start_blocks="$((skip_bytes / page_size))"
-window_offset="$((skip_bytes % page_size))"
-window_length_blocks="$((window_bytes / page_size + 1))"
-
-# Using dd with bs=1 is too slow, so we first carve out the pages our desired
-# bytes are located in, and then we trim the resulting data with what we need.
-head_fb0="dd if=/proc/$pid/mem bs=$page_size skip=$window_start_blocks count=$window_length_blocks 2>/dev/null | tail -c+$window_offset | head -c $window_bytes"
-```
-By the patch to use `reDump`:
-```bash
-# Save framebuffer location
-framebuffer_addresse="$((0x$skip_bytes_hex))"
-echo "framebuffer is at 0x$framebuffer_addresse"
-
-# carve the framebuffer out of the process memory
-window_offset=8
-
-# Use the faster reDump insted of dd, head and tail
-head_fb0="/home/root/reDump -p $pid -b $framebuffer_addresse -s $window_offset -c $window_bytes"
-```
-
-**Optional** Fix rotation.
-
-Add a `transpose=2` to the video filters.
-
-```bash
-video_filters="$video_filters,transpose=2"
-```
-
-Done! Now you can use reStream!
 
 # What do I know about the rM2 framebuffer
 
